@@ -2,19 +2,21 @@ var express = require("express");
 var router = express.Router();
 var connection = require("../config/database.js");
 
-const Model_Alat = require('../model/model_alat');
+const Model_Pemilik = require('../model/model_pemilik');
 
 
 router.get('/', async function(req, res, next){
-    let rows = await Model_Alat.getAll();
-    res.render ('alat/index',{
+    let rows = await Model_Pemilik.getAll();
+    res.render ('pemilik/index',{
         data : rows
     })
 })
  
 router.get('/create', function(req,res){
-    res.render('alat/create', {
-        nama_alat: ''
+    res.render('pemilik/create', {
+        nama_pemilik: '',
+        alamat : '',
+        nomer_hp : ''
     })
 })
 
@@ -24,7 +26,7 @@ router.post ('/store', async function (req, res, next){
         let Data = {
             nama_alat
         }
-        await Model_Alat.Store(Data);
+        await Model_Pemilik.Store(Data);
         req.flash('success','berhasil menyimpan data');
         res.redirect('/alat_tangkap')
     } catch {
@@ -37,7 +39,7 @@ router.post ('/store', async function (req, res, next){
 
 router.get('/edit/(:id)', async function (req, res, next){
     let id = req.params.id;
-    let rows = await Model_Alat.getId(id);
+    let rows = await Model_Pemilik.getId(id);
     res.render('alat/edit',{
         id : rows[0].id_alat,
         nama_alat : rows[0].nama_alat
@@ -70,7 +72,7 @@ router.post('/update/(:id)', function(req, res, next){
 
 router.get('/delete/(:id)', async function(req, res, next){
     let id = req.params.id;
-    await Model_Alat.Delete(id);
+    await Model_Pemilik.Delete(id);
     req.flash('success','berhasil menghapus');
     res.redirect('/alat_tangkap')
  })
